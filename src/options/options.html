@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Pin to Clipboard settings</title>
+    <style>
+      body { font-family: -apple-system, system-ui, sans-serif; padding: 24px; max-width: 520px; }
+      h1 { font-size: 18px; margin: 0 0 16px; }
+      fieldset { border: 1px solid #ddd; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; }
+      legend { font-weight: 600; padding: 0 6px; }
+      label { display: block; padding: 6px 0; }
+      .hint { color: #666; font-size: 12px; margin-top: 4px; }
+    </style>
+  </head>
+  <body>
+    <h1>Pin to Clipboard</h1>
+    <fieldset>
+      <legend>Image quality</legend>
+      <label><input type="radio" name="imageQuality" value="largest-available" /> Largest available (fast)</label>
+      <label><input type="radio" name="imageQuality" value="original" /> Original (highest, slower)</label>
+      <div class="hint">Larger images may exceed the browser's gesture window and fall back to copying the URL.</div>
+    </fieldset>
+    <fieldset>
+      <legend>Video action (pin detail page only)</legend>
+      <label><input type="radio" name="videoAction" value="copy-url" /> Copy URL as text</label>
+      <label><input type="radio" name="videoAction" value="download" /> Download video</label>
+      <label><input type="radio" name="videoAction" value="both" /> Both</label>
+      <div class="hint">Grid videos always copy the poster image.</div>
+    </fieldset>
+    <script type="module" src="options.js"></script>
+  </body>
+</html>
