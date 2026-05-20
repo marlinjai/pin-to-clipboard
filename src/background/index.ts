@@ -38,8 +38,22 @@ chrome.runtime.onMessage.addListener((msg: Message, _sender, sendResponse) => {
         return { ok: true, type: "VIDEO_DONE", copiedUrl: url, downloaded };
       }
       if (msg.type === "TRANSCODE_TO_PNG") {
-        // Routed to offscreen in Task 9; placeholder here to be replaced.
-        return fail("TRANSCODE_FAILED", "Offscreen not wired yet");
+        const exists = await chrome.offscreen.hasDocument?.();
+        if (!exists) {
+          await chrome.offscreen.createDocument({
+            url: "offscreen/offscreen.html",
+            reasons: ["BLOBS" as chrome.offscreen.Reason],
+            justification: "Transcode an image the clipboard cannot accept natively",
+          });
+        }
+        const r: { ok: boolean; bytes?: ArrayBuffer; message?: string } =
+          await chrome.runtime.sendMessage({
+            type: "OFFSCREEN_TRANSCODE",
+            bytes: msg.bytes,
+            mimeType: msg.mimeType,
+          });
+        if (!r.ok || !r.bytes) return fail("TRANSCODE_FAILED", r.message ?? "transcode failed");
+        return { ok: true, type: "PNG_BYTES", bytes: r.bytes };
       }
       return fail("FETCH_FAILED", "Unknown message");
     } catch (e) {
