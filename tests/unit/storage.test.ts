@@ -4,7 +4,6 @@ import { DEFAULT_SETTINGS } from "../../src/shared/types";
 
 function mockChromeStorage(initial: Record<string, unknown> = {}) {
   const store = { ...initial };
-  // @ts-expect-error - test stub
   globalThis.chrome = {
     storage: {
       sync: {
@@ -15,7 +14,7 @@ function mockChromeStorage(initial: Record<string, unknown> = {}) {
         set: vi.fn(async (obj) => Object.assign(store, obj)),
       },
     },
-  };
+  } as any;
   return store;
 }
 

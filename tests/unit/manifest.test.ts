@@ -18,9 +18,9 @@ describe("manifest", () => {
   });
 
   it("registers SW, content script, options page, and action", () => {
-    expect(manifest.background.service_worker).toBe("background/index.js");
-    expect(manifest.content_scripts[0].matches).toContain("*://*.pinterest.com/*");
-    expect(manifest.content_scripts[0].js).toEqual(["content/index.js"]);
+    expect(manifest.background!.service_worker).toBe("background/index.js");
+    expect(manifest.content_scripts![0]!.matches).toContain("*://*.pinterest.com/*");
+    expect(manifest.content_scripts![0]!.js).toEqual(["content/index.js"]);
     expect(manifest.options_page).toBe("options/options.html");
     expect(manifest.action).toBeDefined();
   });
