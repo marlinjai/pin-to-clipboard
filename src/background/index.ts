@@ -1,6 +1,7 @@
 import { Message, Response, ErrorCode } from "../shared/types";
 import { resolveBestUrl } from "./resolver";
 import { fetchBytes } from "./fetcher";
+import { bytesToBase64 } from "../shared/base64";
 
 function fail(code: ErrorCode, message: string, fallbackUrl?: string): Response {
   return { ok: false, code, message, fallbackUrl };
@@ -9,7 +10,7 @@ function fail(code: ErrorCode, message: string, fallbackUrl?: string): Response 
 chrome.runtime.onMessage.addListener((msg: Message, _sender, sendResponse) => {
   (async (): Promise<Response> => {
     try {
-      if (msg.type === "RESOLVE_AND_FETCH") {
+      if (msg.type === "COPY_IMAGE") {
         const resolved = await resolveBestUrl(msg.pinId, msg.candidateUrl, msg.quality);
         if (resolved.backoff && resolved.url === msg.candidateUrl) {
           return fail("CDN_BLOCKED", "CDN throttled, using displayed size", resolved.url);
@@ -19,7 +20,16 @@ chrome.runtime.onMessage.addListener((msg: Message, _sender, sendResponse) => {
           if (mimeType === "image/gif" || mimeType === "image/apng") {
             return fail("ANIMATED_UNCOPYABLE", "Animated image, copy URL instead", resolved.url);
           }
-          return { ok: true, type: "MEDIA", bytes, mimeType, resolvedUrl: resolved.url };
+          // Image bytes travel to the content script as base64; the content
+          // script decodes and (if needed) transcodes to PNG before writing
+          // to the clipboard.
+          return {
+            ok: true,
+            type: "IMAGE",
+            base64: bytesToBase64(bytes),
+            mimeType,
+            resolvedUrl: resolved.url,
+          };
         } catch (e) {
           return fail("FETCH_FAILED", String((e as Error).message), resolved.url);
         }
@@ -36,24 +46,6 @@ chrome.runtime.onMessage.addListener((msg: Message, _sender, sendResponse) => {
           downloaded = true;
         }
         return { ok: true, type: "VIDEO_DONE", copiedUrl: url, downloaded };
-      }
-      if (msg.type === "TRANSCODE_TO_PNG") {
-        const exists = await chrome.offscreen.hasDocument?.();
-        if (!exists) {
-          await chrome.offscreen.createDocument({
-            url: "offscreen/offscreen.html",
-            reasons: ["BLOBS" as chrome.offscreen.Reason],
-            justification: "Transcode an image the clipboard cannot accept natively",
-          });
-        }
-        const r: { ok: boolean; bytes?: ArrayBuffer; message?: string } =
-          await chrome.runtime.sendMessage({
-            type: "OFFSCREEN_TRANSCODE",
-            bytes: msg.bytes,
-            mimeType: msg.mimeType,
-          });
-        if (!r.ok || !r.bytes) return fail("TRANSCODE_FAILED", r.message ?? "transcode failed");
-        return { ok: true, type: "PNG_BYTES", bytes: r.bytes };
       }
       return fail("FETCH_FAILED", "Unknown message");
     } catch (e) {

@@ -1,4 +1,5 @@
 import { ImageQuality, Message, Response } from "../shared/types";
+import { base64ToBytes } from "../shared/base64";
 
 export interface CopyArgs {
   pinId: string;
@@ -16,38 +17,71 @@ async function send(msg: Message): Promise<Response> {
   return (await chrome.runtime.sendMessage(msg)) as Response;
 }
 
-async function buildBlob(args: CopyArgs): Promise<{ blob: Blob; resolvedUrl: string } | { fallbackUrl: string; reason: string }> {
-  const r = await send({ type: "RESOLVE_AND_FETCH", ...args });
-  if (!r.ok) return { fallbackUrl: r.fallbackUrl ?? args.candidateUrl, reason: r.message };
-  if (r.type !== "MEDIA") return { fallbackUrl: args.candidateUrl, reason: "unexpected response" };
-  let bytes = r.bytes;
-  let mimeType = r.mimeType;
-  if (mimeType !== "image/png") {
-    const t = await send({ type: "TRANSCODE_TO_PNG", bytes, mimeType });
-    if (!t.ok || t.type !== "PNG_BYTES") return { fallbackUrl: r.resolvedUrl, reason: "transcode failed" };
-    bytes = t.bytes;
-    mimeType = "image/png";
+// Re-encode to PNG so the ClipboardItem key ("image/png") always matches the
+// blob type. The bitmap is decoded from local bytes (not an on-page cross-origin
+// <img>), so the canvas is not tainted and toBlob succeeds.
+async function transcodeToPng(source: Blob): Promise<Blob> {
+  const bitmap = await createImageBitmap(source);
+  try {
+    const canvas = document.createElement("canvas");
+    canvas.width = bitmap.width;
+    canvas.height = bitmap.height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("could not get a 2d canvas context");
+    ctx.drawImage(bitmap, 0, 0);
+    return await new Promise<Blob>((resolve, reject) =>
+      canvas.toBlob(
+        (b) => (b ? resolve(b) : reject(new Error("canvas.toBlob returned null"))),
+        "image/png"
+      )
+    );
+  } finally {
+    bitmap.close();
   }
-  return { blob: new Blob([bytes], { type: mimeType }), resolvedUrl: r.resolvedUrl };
+}
+
+async function buildPngBlob(args: CopyArgs): Promise<Blob> {
+  const r = await send({ type: "COPY_IMAGE", ...args });
+  if (!r.ok) {
+    throw Object.assign(new Error(r.message), {
+      fallbackUrl: r.fallbackUrl ?? args.candidateUrl,
+    });
+  }
+  if (r.type !== "IMAGE") {
+    throw Object.assign(new Error("unexpected response"), {
+      fallbackUrl: args.candidateUrl,
+    });
+  }
+  const sourceBlob = new Blob([base64ToBytes(r.base64) as BlobPart], {
+    type: r.mimeType,
+  });
+  if (r.mimeType === "image/png") return sourceBlob;
+  return transcodeToPng(sourceBlob);
 }
 
 export async function copyImage(args: CopyArgs): Promise<CopyResult> {
-  // Synchronously start the clipboard write with a Promise<Blob>.
-  const blobPromise = buildBlob(args).then((res) => {
-    if ("blob" in res) return res.blob;
-    throw Object.assign(new Error(res.reason), { fallbackUrl: res.fallbackUrl });
-  });
+  // Construct the ClipboardItem synchronously inside the click gesture; the
+  // network fetch and transcode happen inside the Promise<Blob>.
+  const blobPromise = buildPngBlob(args);
+  blobPromise.catch(() => {}); // avoid an unhandled-rejection warning
   try {
-    const item = new ClipboardItem({ "image/png": blobPromise as unknown as Promise<Blob> });
+    const item = new ClipboardItem({ "image/png": blobPromise });
     await navigator.clipboard.write([item]);
     return { ok: true };
   } catch (e) {
-    const fallbackUrl = (e as { fallbackUrl?: string }).fallbackUrl ?? args.candidateUrl;
+    // If buildPngBlob was the failure, recover its real reason + fallback URL.
+    let err = e as Error & { fallbackUrl?: string };
+    try {
+      await blobPromise;
+    } catch (inner) {
+      err = inner as Error & { fallbackUrl?: string };
+    }
+    const fallbackUrl = err.fallbackUrl ?? args.candidateUrl;
     try {
       await navigator.clipboard.writeText(fallbackUrl);
-      return { ok: true, fellBackToUrl: true, errorMessage: (e as Error).message };
+      return { ok: true, fellBackToUrl: true, errorMessage: err.message };
     } catch {
-      return { ok: false, errorMessage: (e as Error).message };
+      return { ok: false, errorMessage: err.message };
     }
   }
 }

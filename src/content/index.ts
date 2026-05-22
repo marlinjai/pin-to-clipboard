@@ -60,7 +60,7 @@ async function handleClick(card: HTMLElement, setState: (s: "loading" | "ok" | "
   if (r.ok) {
     setState("ok");
     showToast(
-      r.fellBackToUrl ? "Copied image URL (couldn't copy image)" : "Image copied",
+      r.fellBackToUrl ? "Image unavailable, copied its URL instead" : "Image copied",
       r.fellBackToUrl ? "info" : "ok"
     );
   } else {

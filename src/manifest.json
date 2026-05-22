@@ -18,7 +18,7 @@
   ],
   "options_page": "options/options.html",
   "action": { "default_title": "Pin to Clipboard settings" },
-  "permissions": ["storage", "downloads", "offscreen"],
+  "permissions": ["storage", "downloads"],
   "host_permissions": [
     "*://*.pinterest.com/*",
     "*://i.pinimg.com/*",

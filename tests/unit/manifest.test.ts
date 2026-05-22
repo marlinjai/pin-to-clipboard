@@ -5,9 +5,10 @@ describe("manifest", () => {
   it("declares MV3 with the expected permissions and no clipboardWrite", () => {
     expect(manifest.manifest_version).toBe(3);
     expect(manifest.permissions).toEqual(
-      expect.arrayContaining(["storage", "downloads", "offscreen"])
+      expect.arrayContaining(["storage", "downloads"])
     );
     expect(manifest.permissions).not.toContain("clipboardWrite");
+    expect(manifest.permissions).not.toContain("offscreen");
     expect(manifest.host_permissions).toEqual(
       expect.arrayContaining([
         "*://*.pinterest.com/*",

@@ -14,14 +14,12 @@ const common = {
 const entries = [
   { entryPoints: ["src/background/index.ts"], outdir: "dist/background" },
   { entryPoints: ["src/content/index.ts"], outdir: "dist/content" },
-  { entryPoints: ["src/offscreen/offscreen.ts"], outdir: "dist/offscreen" },
   { entryPoints: ["src/options/options.ts"], outdir: "dist/options" },
 ];
 
 async function copyStatic() {
   await mkdir("dist", { recursive: true });
   await cp("src/manifest.json", "dist/manifest.json");
-  await cp("src/offscreen/offscreen.html", "dist/offscreen/offscreen.html");
   await cp("src/options/options.html", "dist/options/options.html");
   await cp("src/assets", "dist/assets", { recursive: true });
 }
