@@ -62,17 +62,20 @@ Paste these verbatim into the per-permission justification fields in the dashboa
 
 ## Privacy policy URL
 
-`<provide a public URL: e.g. GitHub Pages, a Gist, or the markdown file in a public repo>`
+https://marlinjai.github.io/pin-to-clipboard/privacy.html
 
-## Screenshot direction (capture before submission)
+(Project landing page: https://marlinjai.github.io/pin-to-clipboard/)
 
-The store requires at least 1 screenshot (1280 x 800 or 640 x 400), up to 5. Recommended captures:
+## Screenshots
 
-1. **Hero**: a board view with the red copy button visible on hover at the bottom-left of a pin. Include a couple of other pins for context.
-2. **Confirmation**: the same board view with the "Image copied" toast at the bottom of the screen.
-3. **Options page**: the settings UI.
-4. **Detail page**: a video pin's detail view with the copy button (showing video-action support).
-5. **Before/after**: native Pinterest right-click on the grid (no Copy Image) next to the extension's button.
+Final 1280x800 PNGs ready for upload live in `screenshots/`:
+
+- `screenshots/01.png`
+- `screenshots/02.png`
+- `screenshots/03.png`
+- `screenshots/04.png`
+
+Raw captures go in `screenshots/sources/` (gitignored). Run `npm run build:screenshots` to regenerate the store-ready PNGs from the raw sources.
 
 ## Pre-submission checklist
 
