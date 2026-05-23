@@ -66,6 +66,10 @@ https://marlinjai.github.io/pin-to-clipboard/privacy.html
 
 (Project landing page: https://marlinjai.github.io/pin-to-clipboard/)
 
+## Store icon
+
+`src/assets/store-icon.png` (128 x 128 PNG) : Pinterest-red squircle with the white copy glyph, rendered via Nano Banana 2 from `scripts/store-icon-prompt.json`. Source render at `src/assets/icon-source.jpg`. Regenerate with `npm run build:icons`.
+
 ## Screenshots
 
 Final 1280x800 PNGs ready for upload live in `screenshots/`:

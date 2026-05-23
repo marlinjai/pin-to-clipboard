@@ -1,0 +1,15 @@
+{
+  "prompt": "A glossy 3D-rendered macOS-style app icon, perfectly centered on a pure white #FFFFFF background. The icon is a vivid Pinterest-red (#E60023) squircle (rounded square with ~28% corner radius and an iOS-style continuous curve) at 1:1 aspect, occupying ~88% of the frame. The red surface has a faint vertical gradient (slightly brighter top, slightly deeper bottom) and a microscopic specular highlight near the top edge suggesting a soft overhead key light. Centered on the squircle is a clean, pure-white 'copy' mark: two overlapping rounded-rectangle frames at ~60% icon-width, drawn as crisp white outlines about 6% icon-width thick, with the front rectangle filled in the same Pinterest red so it visually cuts into the back rectangle - the canonical Lucide / Heroicons / Material-style copy glyph. The white outlines are very subtly embossed with a 1-pixel inner highlight on the top edge and a 1-pixel inner shadow on the bottom edge to give the glyph a faint pressed-in depth. A soft, diffuse drop shadow sits beneath the squircle: ~12% blur, ~6% offset down, ~25% opacity, no harsh edges. No text, no signature, no watermark, no extra elements. Studio product render, perfectly geometric, vector-clean edges, no JPEG artifacts, no banding in the red, no rainbow specular reflections. Must remain instantly readable when downscaled to 16x16, so the glyph stays chunky and high-contrast.",
+  "negative_prompt": "text, letters, numbers, words, watermark, signature, multiple icons, grid of icons, tiles, photographic noise, film grain, JPEG artifacts, color banding, jagged edges, blur, motion blur, depth of field, bokeh, soft focus, low resolution, pixelation, off-center, tilted, perspective, skew, drop shadow extending past the frame, dark background, gradient background, photographic backdrop, paper texture, wood texture, fabric texture, hand, finger, screen, monitor, phone, frame, border, sticker rim, peeling, gloss reflection of windows, complex specular highlights, rainbow reflection, chromatic aberration, lens flare, light leak, vignette, purple, magenta, pink, orange, brown, muted red, pastel red, dark red, burgundy, crimson, scarlet, washed-out colors, retro filter, vintage, grunge, distressed, scratched, weathered, hand-drawn, sketch, watercolor, oil paint, illustration with brush strokes, line art, isometric perspective, 3/4 view, dimetric projection, anything other than a strictly orthographic flat-front view, cast shadow on the icon face from a foreign object, secondary objects, person, face, eye, pin, thumbtack, clipboard with paper, paper sheet, scroll, document with corners visible",
+  "settings": {
+    "aspect_ratio": "1:1",
+    "resolution": "1024x1024",
+    "camera_style": "orthographic product render, dead-on front view",
+    "focal_length": "n/a - orthographic",
+    "aperture": "n/a",
+    "iso": "n/a",
+    "sharpness": "razor-sharp vector edges, no anti-aliasing softness beyond a single subpixel",
+    "noise": "none - clean studio render",
+    "dynamic_range": "high, no clipping in the red, pure white background"
+  }
+}
