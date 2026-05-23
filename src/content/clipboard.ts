@@ -14,7 +14,9 @@ export interface CopyResult {
 }
 
 async function send(msg: Message): Promise<Response> {
-  return (await chrome.runtime.sendMessage(msg)) as Response;
+  const r = (await chrome.runtime.sendMessage(msg)) as Response;
+  if (!r) throw new Error("service worker returned no response");
+  return r;
 }
 
 // Re-encode to PNG so the ClipboardItem key ("image/png") always matches the
@@ -56,7 +58,13 @@ async function buildPngBlob(args: CopyArgs): Promise<Blob> {
     type: r.mimeType,
   });
   if (r.mimeType === "image/png") return sourceBlob;
-  return transcodeToPng(sourceBlob);
+  try {
+    return await transcodeToPng(sourceBlob);
+  } catch (e) {
+    throw Object.assign(new Error(`transcode failed: ${(e as Error).message}`), {
+      fallbackUrl: args.candidateUrl,
+    });
+  }
 }
 
 export async function copyImage(args: CopyArgs): Promise<CopyResult> {

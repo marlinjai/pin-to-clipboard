@@ -22,50 +22,69 @@ function pinIdFromCard(card: HTMLElement): string {
   );
 }
 
-async function handleClick(card: HTMLElement, setState: (s: "loading" | "ok" | "error") => void) {
-  const settings = await getSettings();
-  const kind = classifyCard(card);
-  const pinId = pinIdFromCard(card);
-  setState("loading");
+// chrome.* calls on a content script whose extension was reloaded throw
+// "Extension context invalidated." The tab still has the orphaned content
+// script until the page is reloaded. Detect and tell the user once.
+function isContextInvalidated(e: unknown): boolean {
+  return /Extension context invalidated/i.test(String((e as Error)?.message ?? ""));
+}
 
-  if (kind === "video" && document.querySelector("[data-test-id=pin-closeup]") === card) {
-    const sources = extractVideoSources(card);
-    const r = (await chrome.runtime.sendMessage({ type: "VIDEO_ACTION", pinId, sources })) as {
-      ok: boolean;
-      type?: string;
-      copiedUrl?: string;
-      downloaded?: boolean;
-    };
-    if (r?.ok && r.type === "VIDEO_DONE") {
-      if (r.copiedUrl) await navigator.clipboard.writeText(r.copiedUrl);
-      setState("ok");
-      showToast(r.downloaded ? "Video downloaded + URL copied" : "Video URL copied", "ok");
+async function handleClick(
+  card: HTMLElement,
+  setState: (s: "loading" | "ok" | "error") => void
+) {
+  try {
+    const settings = await getSettings();
+    const kind = classifyCard(card);
+    const pinId = pinIdFromCard(card);
+    setState("loading");
+
+    if (kind === "video" && document.querySelector("[data-test-id=pin-closeup]") === card) {
+      const sources = extractVideoSources(card);
+      const r = (await chrome.runtime.sendMessage({ type: "VIDEO_ACTION", pinId, sources })) as {
+        ok: boolean;
+        type?: string;
+        copiedUrl?: string;
+        downloaded?: boolean;
+      };
+      if (r?.ok && r.type === "VIDEO_DONE") {
+        if (r.copiedUrl) await navigator.clipboard.writeText(r.copiedUrl);
+        setState("ok");
+        showToast(r.downloaded ? "Video downloaded, URL copied" : "Video URL copied", "ok");
+        return;
+      }
+      setState("error");
+      showToast("No video source found", "error");
       return;
     }
-    setState("error");
-    showToast("No video source found", "error");
-    return;
-  }
 
-  const candidate =
-    kind === "video"
-      ? extractVideoSources(card).posterUrl ?? null
-      : extractCandidateImageUrl(card);
-  if (!candidate) {
+    const candidate =
+      kind === "video"
+        ? extractVideoSources(card).posterUrl ?? null
+        : extractCandidateImageUrl(card);
+    if (!candidate) {
+      setState("error");
+      showToast("Image not ready yet, try again", "error");
+      return;
+    }
+    const r = await copyImage({ pinId, candidateUrl: candidate, quality: settings.imageQuality });
+    if (r.ok) {
+      setState("ok");
+      showToast(
+        r.fellBackToUrl ? "Couldn't copy image, copied URL instead" : "Image copied",
+        r.fellBackToUrl ? "info" : "ok"
+      );
+    } else {
+      setState("error");
+      showToast(r.errorMessage ?? "Copy failed", "error");
+    }
+  } catch (e) {
     setState("error");
-    showToast("Image not ready yet, try again", "error");
-    return;
-  }
-  const r = await copyImage({ pinId, candidateUrl: candidate, quality: settings.imageQuality });
-  if (r.ok) {
-    setState("ok");
-    showToast(
-      r.fellBackToUrl ? "Image unavailable, copied its URL instead" : "Image copied",
-      r.fellBackToUrl ? "info" : "ok"
-    );
-  } else {
-    setState("error");
-    showToast(r.errorMessage ?? "Copy failed", "error");
+    if (isContextInvalidated(e)) {
+      showToast("Please reload this page (extension was updated)", "error");
+    } else {
+      showToast("Copy failed", "error");
+    }
   }
 }
 

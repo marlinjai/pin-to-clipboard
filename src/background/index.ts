@@ -20,9 +20,6 @@ chrome.runtime.onMessage.addListener((msg: Message, _sender, sendResponse) => {
           if (mimeType === "image/gif" || mimeType === "image/apng") {
             return fail("ANIMATED_UNCOPYABLE", "Animated image, copy URL instead", resolved.url);
           }
-          // Image bytes travel to the content script as base64; the content
-          // script decodes and (if needed) transcodes to PNG before writing
-          // to the clipboard.
           return {
             ok: true,
             type: "IMAGE",
@@ -52,7 +49,7 @@ chrome.runtime.onMessage.addListener((msg: Message, _sender, sendResponse) => {
       return fail("FETCH_FAILED", String((e as Error).message));
     }
   })().then(sendResponse);
-  return true; // keep channel open for async
+  return true; // keep channel open for async sendResponse
 });
 
 chrome.action.onClicked.addListener(() => {
