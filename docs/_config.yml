@@ -1,0 +1,8 @@
+# GitHub Pages serves /docs as the public site. The internal design docs
+# (spec, plan, listing copy, permission rationale) live alongside in the
+# same folder so they ship with the repo, but are excluded from Pages so
+# the public site only exposes the landing page and the privacy policy.
+exclude:
+  - superpowers
+  - PRIVACY-AND-PERMISSIONS.md
+  - STORE-LISTING.md
