@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privacy Policy : Pin to Clipboard</title>
+  <link rel="icon" type="image/svg+xml" href="icon.svg" />
+  <style>
+    :root { color-scheme: light dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100dvh;
+      font: 16px/1.6 -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+      color: #111; background: #fff;
+      padding: 56px 24px;
+    }
+    @media (prefers-color-scheme: dark) {
+      body { color: #f4f4f4; background: #0d0d0d; }
+      a { color: #ff6b80; }
+    }
+    main { max-width: 680px; margin: 0 auto; }
+    .back { color: inherit; text-decoration: none; opacity: .65; font-size: 14px; }
+    .back:hover { opacity: 1; }
+    h1 { font-size: 30px; margin: 16px 0 4px; letter-spacing: -0.02em; }
+    .meta { color: #777; margin-bottom: 28px; }
+    @media (prefers-color-scheme: dark) { .meta { color: #999; } }
+    h2 { font-size: 18px; margin-top: 28px; }
+    p { margin: 10px 0; }
+    code { background: rgba(0,0,0,.06); padding: 1px 6px; border-radius: 4px; font-size: .9em; }
+    @media (prefers-color-scheme: dark) { code { background: rgba(255,255,255,.08); } }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="./">&larr; Pin to Clipboard</a>
+    <h1>Privacy Policy</h1>
+    <p class="meta">Last updated: 2026-05-23.</p>
+
+    <h2>What this extension is</h2>
+    <p>Pin to Clipboard is a Chrome extension that adds a one-click copy button to Pinterest pins. It only runs on <code>pinterest.com</code>.</p>
+
+    <h2>What we collect</h2>
+    <p>Nothing. No analytics, no telemetry, no remote code, no third-party services.</p>
+
+    <h2>What's stored</h2>
+    <p>Two user preferences (image quality and video action) are saved via Chrome's <code>storage.sync</code>. That is the only state the extension keeps. There is no account, no identifier, no log.</p>
+
+    <h2>What we access</h2>
+    <p>When you click the copy button, the extension fetches the specific media you clicked from Pinterest's CDN (<code>i.pinimg.com</code> for images, <code>v.pinimg.com</code> for videos). No other network requests are made. The fetched bytes are written to your clipboard locally and immediately discarded.</p>
+
+    <h2>Sharing or selling data</h2>
+    <p>Never. There is no data to share.</p>
+
+    <h2>Source code</h2>
+    <p>Open source on GitHub: <a href="https://github.com/marlinjai/pin-to-clipboard">github.com/marlinjai/pin-to-clipboard</a>.</p>
+
+    <h2>Contact</h2>
+    <p>Open an issue on the GitHub repository.</p>
+  </main>
+</body>
+</html>
