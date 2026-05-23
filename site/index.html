@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pin to Clipboard</title>
+  <meta name="description" content="A Chrome extension that adds a one-click copy button to Pinterest pins." />
+  <link rel="icon" type="image/svg+xml" href="icon.svg" />
+  <style>
+    :root { color-scheme: light dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100dvh;
+      font: 16px/1.55 -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+      color: #111; background: #fff;
+      display: grid; place-items: center;
+      padding: 48px 24px;
+    }
+    @media (prefers-color-scheme: dark) {
+      body { color: #f4f4f4; background: #0d0d0d; }
+      a { color: #ff6b80; }
+    }
+    main { max-width: 640px; width: 100%; }
+    .icon {
+      width: 88px; height: 88px;
+      background: #E60023; border-radius: 20px;
+      display: grid; place-items: center;
+      box-shadow: 0 6px 18px rgba(230, 0, 35, .22);
+    }
+    .icon svg { width: 52px; height: 52px; color: #fff; }
+    h1 { font-size: 36px; margin: 28px 0 8px; letter-spacing: -0.02em; }
+    .tag { color: #666; margin: 0 0 28px; font-size: 18px; }
+    @media (prefers-color-scheme: dark) { .tag { color: #aaa; } }
+    p { margin: 14px 0; }
+    .links { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px; }
+    .links a {
+      display: inline-block; padding: 10px 16px;
+      border-radius: 999px; text-decoration: none;
+      background: #111; color: #fff; font-weight: 500;
+    }
+    .links a.primary { background: #E60023; }
+    .links a.ghost { background: transparent; color: inherit; border: 1px solid currentColor; }
+    @media (prefers-color-scheme: dark) { .links a { background: #f4f4f4; color: #0d0d0d; } }
+    footer { margin-top: 48px; color: #888; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="9" width="13" height="13" rx="2"/>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+      </svg>
+    </div>
+    <h1>Pin to Clipboard</h1>
+    <p class="tag">One-click copy of any Pinterest pin's image, straight from the board.</p>
+    <p>Pinterest only lets you "Copy Image" from a pin's detail page. Pin to Clipboard adds a small red copy button to every pin on the board, home feed, and search results : one click and the image is on your clipboard, ready to paste anywhere.</p>
+    <p>Open source, no analytics, no telemetry, no remote code. The extension only runs on <code>pinterest.com</code>.</p>
+    <div class="links">
+      <a class="primary" href="https://chrome.google.com/webstore/" rel="noopener">Get it on the Chrome Web Store</a>
+      <a class="ghost" href="https://github.com/marlinjai/pin-to-clipboard" rel="noopener">Source on GitHub</a>
+      <a class="ghost" href="privacy.html">Privacy</a>
+    </div>
+    <footer>Built by <a href="https://github.com/marlinjai">@marlinjai</a>. MIT licensed.</footer>
+  </main>
+</body>
+</html>

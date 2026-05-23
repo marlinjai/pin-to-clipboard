@@ -4,3 +4,4 @@ dist/
 .infisical.json
 playwright-report/
 test-results/
+screenshots/sources/
