@@ -1,12 +1,20 @@
 ---
 title: "Pin to Clipboard: Chrome Extension Design"
 type: plan
-status: draft
+status: completed
 date: 2026-05-19
 summary: "MV3 Chrome extension that adds a one-click button to copy a Pinterest pin's image to the clipboard from the grid, home feed, and search, plus a configurable video action on the detail page."
 tags: [chrome-extension, manifest-v3, pinterest, clipboard]
 projects: [pin-to-clipboard]
 ---
+
+## Reality update (2026-09-10)
+
+v0.1.1 is built and packaged (zip, store screenshots, listing assets,
+GitHub Pages privacy site all committed), left at `draft` even though
+shipped. Reconciled to `completed`. The one thing not done is the
+Chrome Web Store submission itself, which is a dated ROADMAP.md line,
+not a plan gap.
 
 # Pin to Clipboard: Chrome Extension Design
 

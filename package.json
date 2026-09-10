@@ -9,6 +9,7 @@
     "build:icons": "node scripts/build-icons.mjs",
     "build:screenshots": "node scripts/build-store-screenshots.mjs",
     "test": "vitest run",
+    "check:roadmap": "npx --yes github:marlinjai/actions-shared#roadmap-check-v1 --root .",
     "test:watch": "vitest",
     "e2e": "playwright test",
     "typecheck": "tsc --noEmit"
