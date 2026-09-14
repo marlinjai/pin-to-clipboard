@@ -1,4 +1,14 @@
+---
+type: plan
+status: completed
+date: 2026-05-20
+---
+
 # Pin to Clipboard Implementation Plan
+
+## Reality update (2026-09-10)
+
+Shipped; see the companion spec `docs/superpowers/specs/2026-05-19-pinterest-copy-extension-design.md` for the reality-check detail.
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 

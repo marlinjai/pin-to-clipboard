@@ -1,0 +1,19 @@
+name: Verify
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+jobs:
+  # The root ROADMAP.md is the only index of open work; plans under
+  # docs/superpowers/plans/ and docs/superpowers/specs/ are the only place
+  # content lives. Rule: knowledge-base standards/document-lifecycle.md,
+  # section 4.
+  roadmap-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: marlinjai/actions-shared/roadmap-check@roadmap-check-v1
+        with:
+          max-age: 30
