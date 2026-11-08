@@ -18,7 +18,7 @@
     "@playwright/test": "^1.46.0",
     "@types/chrome": "^0.0.270",
     "@types/node": "^20.14.0",
-    "esbuild": "^0.23.0",
+    "esbuild": "^0.28.2",
     "jsdom": "^24.1.0",
     "sharp": "^0.33.5",
     "typescript": "^5.5.0",
