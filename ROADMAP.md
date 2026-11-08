@@ -12,7 +12,7 @@ This repository has been dormant since 2026-05-23. Its default branch is `master
       email at the developer console account page, then the listing checklist
       (privacy fields, flip "remote code" to No, single-purpose wording,
       description), then Submit for review. Needs Marlin in the Chrome Web Store
-      developer console, not something this session executes (2026-09-10)
+      developer console, not something this session executes (2026-11-08)
 
 - [ ] A smart-naming feature was decided but never implemented: the alt-text slug
       as the primary download filename via `chrome.downloads.download({filename})`
@@ -24,4 +24,4 @@ This repository has been dormant since 2026-05-23. Its default branch is `master
       `src/background/index.ts`. No plan or pull request exists yet; the decision
       itself needs no further input from Marlin, but implementing three new
       features in a dormant repo is bigger than this home-and-close session
-      (2026-09-10)
+      (2026-11-08)
